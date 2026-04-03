@@ -1,4 +1,6 @@
 
+using Identity.Middleware;
+
 namespace Identity
 {
     public class Program
@@ -13,6 +15,8 @@ namespace Identity
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
 
+            builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -20,6 +24,7 @@ namespace Identity
             {
                 app.MapOpenApi();
             }
+            app.UseMiddleware<ExceptionMiddleware>();
 
             app.UseHttpsRedirection();
 
