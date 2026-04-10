@@ -13,6 +13,11 @@ namespace Identity.Repositories.Implementation
         {
             return await _context.Users.FindAsync(email);
         }
+
+        public async Task<User> GetByIdAsync(int id)
+        {
+            return await _context.Users.FindAsync(id);
+        }
         public async Task<User> GetUserWithRolesAsync(int userId)
         {
             return await _context.Users

@@ -2,7 +2,7 @@
 
 namespace Identity.Security.Interfaces
 {
-    public class ITokenService
+    public interface ITokenService
     {
 
         Task<string> GenerateAccessTokenAsync(User user);

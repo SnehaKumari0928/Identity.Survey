@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Identity.DTOs.Auth;
+using Identity.DTOs.User;
 using Identity.Entities;
+using Identity.Exceptions;
 using Identity.Repositories.Interfaces;
 using Identity.Security.Interfaces;
 using Identity.Services.Interfaces;
@@ -34,16 +36,65 @@ namespace Identity.Services.Implementations
 
             var user = _mapper.Map<User>(dto);
 
-            var createUser = await 
+            var createUser = await _authRepo.RegisterAsync(user);
+
+            return await GenerateAuthResponse(createUser);
         }
         public async Task<AuthResponseDto> LoginAsync(LoginDto dto)
         {
+            var existingUser = await _userRepo.GetByEmailAsync(dto.Email);
+            if (existingUser == null)
+            {
+                throw new DirectoryNotFoundException("User not found");
+            }
 
+            if(existingUser.HashedPassword != dto.Password)
+            {
+                throw new UnauthorizedAccessException("Invalid Password");
+            }
+
+            return await GenerateAuthResponse(existingUser);
+            
         }
 
         public async Task<AuthResponseDto> RefreshTokenAsync(string refreshToken)
         {
+            var existingToken = await _authRepo.GetRefreshTokenAsync(refreshToken);
 
+            if (existingToken == null ||
+                existingToken.IsRevoked || existingToken.ExpiryDate < DateTime.UtcNow)
+            {
+                throw new UnauthorizedException("Invalid refresh token");
+
+            }
+
+            var user = existingToken.User;
+
+            await _authRepo.RevokeRefreshTokenAsync(refreshToken);
+
+            return await GenerateAuthResponse(user);
+        }
+
+        private async Task<AuthResponseDto> GenerateAuthResponse(User user,bool isRefresh = false)
+        {
+            var accessToken = await _tokenService.GenerateAccessTokenAsync(user);
+            var refreshToken = _tokenService.GenerateRefreshToken();
+
+            await _authRepo.AddRefreshTokenAsync(new RefreshToken
+            {
+                UserId = user.UserId,
+                Token = refreshToken,
+                ExpiryDate = DateTime.UtcNow.AddDays(7),
+               IsRevoked = false
+            });
+
+            return new AuthResponseDto
+            {
+                AccessToken = accessToken,
+                RefreshToken = refreshToken,
+                User =
+               _mapper.Map<UserResponseDto>(user)
+            };
         }
     }
 }

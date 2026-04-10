@@ -1,4 +1,6 @@
-﻿namespace Identity.DTOs.Auth
+﻿using Identity.DTOs.User;
+
+namespace Identity.DTOs.Auth
 {
     public class AuthResponseDto
     {
