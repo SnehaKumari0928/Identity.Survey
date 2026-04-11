@@ -42,22 +42,24 @@ namespace Identity.Security.Services
             {
                 claims.Add(new Claim("Permission", permission));
 
-                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
-
-                var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-                var token = new JwtSecurityToken(
-                    issuer: _config["Jwt:Issuer"],
-                    audience: _config["Jwt:Audience"],
-                    claims: claims,
-                    expires: DateTime.UtcNow.AddMinutes(
-                        Convert.ToDouble(_config["Jwt:AccessTokenExpiryMinutes"])
-                        ),
-                     signingCredentials: cred
-                    );
-
-                return new JwtSecurityTokenHandler().WriteToken(token);
+               
             }
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
+
+            var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var token = new JwtSecurityToken(
+                issuer: _config["Jwt:Issuer"],
+                audience: _config["Jwt:Audience"],
+                claims: claims,
+                expires: DateTime.UtcNow.AddMinutes(
+                    Convert.ToDouble(_config["Jwt:AccessTokenExpiryMinutes"])
+                    ),
+                 signingCredentials: cred
+                );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
         public string GenerateRefreshToken()
         {

@@ -45,5 +45,13 @@ namespace Identity.Services.Implementations
         {
 
         }
+
+        private async Task<AuthResponseDto> GenerateAuthResponse(User user, bool isRefresh = false)
+        {
+            var accessToken = _tokenService.GenerateAccessTokenAsync(user);
+            var refreshToken = _tokenService.GenerateRefreshToken();
+
+            
+        }
     }
 }
