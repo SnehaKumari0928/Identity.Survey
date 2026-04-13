@@ -24,7 +24,7 @@ namespace Identity.Services.Implementations
 
             if(user == null)
             {
-                throw new DirectoryNotFoundException("User not found");
+                throw new NotFoundException("User not found");
             }
 
             return _mapper.Map<UserResponseDto>(user);
@@ -38,7 +38,7 @@ namespace Identity.Services.Implementations
 
         public async Task<UserResponseDto> CreateUserAsync(CreateUserDto dto)
         {
-            var existingUser = await _userRepo.GetByIdAsync(dto.UserId);
+            var existingUser = await _userRepo.GetByEmailAsync(dto.Email);
 
             if(existingUser == null)
             {

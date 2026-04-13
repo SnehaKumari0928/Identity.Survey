@@ -3,6 +3,6 @@
     public class AssignPermissionToRoleDto
     {
         public int RoleId {  get; set; }
-       public int PermissionId {  get; set; }
+       public List<int> PermissionId {  get; set; }
     }
 }

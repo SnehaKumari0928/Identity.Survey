@@ -8,6 +8,7 @@
         Task<T> CreateAsync(T entity);
         Task<T> UpdateAsync(T entity);
         Task DeleteAsync(int id);
+        Task<T> GetByEmailAsync(string email);
 
     }
 }

@@ -24,8 +24,7 @@ namespace Identity.Repositories.Implementation
                 .ToListAsync();
         }
 
-       
-
+      
         public async Task AssignPermissionsAsync(int roleId, List<int> permissionIds)
         {
             var existingMapping = await _context.RolePermissions

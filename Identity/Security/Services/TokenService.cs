@@ -42,10 +42,7 @@ namespace Identity.Security.Services
             {
                 claims.Add(new Claim("Permission", permission));
 
-<<<<<<< HEAD
-               
-=======
->>>>>>> ef7daa367804dedc64dc0c3488a5317c92f79fa6
+
             }
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));

@@ -14,6 +14,11 @@ namespace Identity.Repositories.Implementation
             _context = context;
         }
 
+        public async Task<T> GetByEmailAsync(string email)
+        {
+            return await _context.Set<T>()
+      .FirstOrDefaultAsync(e => EF.Property<string>(e, "Email") == email);
+        }
         public async Task<T> GetByIdAsync(int id)
         {
             return await _context.Set<T>().FindAsync(id);

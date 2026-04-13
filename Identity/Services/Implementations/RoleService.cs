@@ -104,20 +104,20 @@ namespace Identity.Services.Implementations
 
         }
 
-        public async Task AssignPermissionsAsync(int roleId, List<int> permissionIds)
+        public async Task AssignPermissionsAsync(AssignPermissionToRoleDto dto)
         {
-            var role = await _roleRepo.GetByIdAsync(roleId);
+            var role = await _roleRepo.GetByIdAsync(dto.RoleId);
             if (role == null)
             {
                 throw new NotFoundException("Role not found");
             }
 
-            if(permissionIds == null || !permissionIds.Any())
+            if(dto.PermissionId == null || !dto.PermissionId.Any())
             {
                 throw new BadRequestException("Permission list cannot be empty");
             }
 
-            await _roleRepo.AssignPermissionsAsync(roleId, permissionIds);
+            await _roleRepo.AssignPermissionsAsync(dto.RoleId, dto.PermissionId);
         }
     }
 }

@@ -27,11 +27,11 @@ namespace Identity.Services.Implementations
 
         public async Task<AuthResponseDto> RegisterAsync(RegisterDto dto)
         {
-            var existingUser = await _userRepo.GetByIdAsync(dto.Email);
+            var existingUser = await _userRepo.GetByEmailAsync(dto.Email);
 
             if(existingUser != null)
             {
-                throw new BadHttpRequestException("Email Already exists.");
+                throw new BadRequestException("Email Already exists.");
             }
 
             var user = _mapper.Map<User>(dto);
@@ -45,12 +45,12 @@ namespace Identity.Services.Implementations
             var existingUser = await _userRepo.GetByEmailAsync(dto.Email);
             if (existingUser == null)
             {
-                throw new DirectoryNotFoundException("User not found");
+                throw new NotFoundException("User not found");
             }
 
             if(existingUser.HashedPassword != dto.Password)
             {
-                throw new UnauthorizedAccessException("Invalid Password");
+                throw new UnauthorizedException("Invalid Password");
             }
 
             return await GenerateAuthResponse(existingUser);

@@ -18,6 +18,6 @@ namespace Identity.Services.Interfaces
         Task<RoleResponseDto> UpdateRoleAsync(int roleId,UpdateRoleDto dto);
         Task DeleteRoleAsync(int roleId);
 
-        Task AssignPermissionsAsync(int roleId, List<int> permissionIds);
+        Task AssignPermissionsAsync(AssignPermissionToRoleDto dto);
     }
 }
