@@ -2,7 +2,7 @@
 
 namespace Identity.Repositories.Interfaces
 {
-    public interface IPermissionRepository
+    public interface IPermissionRepository: IGenericRepository<Permission>
     {
         Task<Permission> GetByNameAsync(string name);
         Task<List<string>> GetRolesByPermissionIdAsync(int  permissionId);

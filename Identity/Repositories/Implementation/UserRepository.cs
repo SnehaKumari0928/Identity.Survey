@@ -9,10 +9,7 @@ namespace Identity.Repositories.Implementation
     {
         public UserRepository(AppDbContext context): base(context) { }
 
-        public async Task<User> GetByEmailAsync(string email)
-        {
-            return await _context.Users.FindAsync(email);
-        }
+       
         public async Task<User> GetUserWithRolesAsync(int userId)
         {
             return await _context.Users
@@ -50,6 +47,19 @@ namespace Identity.Repositories.Implementation
                 .Union(userPermissions)
                 .Distinct()
                 .ToList();
+        }
+
+
+
+        public async Task<List<User>> GetUsersWithRolesAndPermissions()
+        {
+            return await _context.Users
+                .Include(u => u.UserRoles)
+                .ThenInclude(ur => ur.Role)
+                .ThenInclude(r => r.RolePermissions)
+                .ThenInclude(rp => rp.Permission)
+                .Include(u => u.Profile)
+                .ToListAsync();
         }
     }
 }

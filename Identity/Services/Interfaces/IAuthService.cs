@@ -8,5 +8,7 @@ namespace Identity.Services.Interfaces
         Task<AuthResponseDto> LoginAsync(LoginDto dto);
 
         Task<AuthResponseDto> RefreshTokenAsync(string refreshToken);
+
+        Task RevokeRefreshTokenAsync(string refreshToken);
     }
 }

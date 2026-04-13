@@ -5,9 +5,9 @@
 
         Task<T> GetByIdAsync(int id);
         Task<List<T>> GetAllAsync();
-        Task AddAsync(T entity);
-        void Update(T entity);
-        void Delete(int id);
+        Task<T> CreateAsync(T entity);
+        Task<T> UpdateAsync(T entity);
+        Task DeleteAsync(int id);
 
     }
 }

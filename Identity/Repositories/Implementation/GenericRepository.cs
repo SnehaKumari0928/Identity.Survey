@@ -23,16 +23,19 @@ namespace Identity.Repositories.Implementation
             return await _context.Set<T>()
                 .ToListAsync();
         }
-        public async Task AddAsync(T entity)
+        public async Task<T> CreateAsync(T entity)
         {
             await _context.Set<T>().AddAsync(entity);
             await _context.SaveChangesAsync();
+            return entity;
         }
-        public void Update(T entity)
+        public async Task<T> UpdateAsync(T entity)
         {
             _context.Set<T>().Update(entity);
+            await _context.SaveChangesAsync();
+            return entity;
         }
-        public void Delete(int id)
+        public async Task DeleteAsync(int id)
         {
             var entity = _context.Set<T>().Find(id);
 
