@@ -34,7 +34,7 @@ namespace Identity.Controllers
         }
 
         [HttpPost]
-        [Authorize("Admin")]
+        [Authorize (Roles ="Admin")]
         public async Task<IActionResult> CreatePermission([FromBody] CreatePermissionDto dto)
         {
            var created = await _permissionService.CreatePermissionAsync(dto);
@@ -43,24 +43,24 @@ namespace Identity.Controllers
         }
 
         [HttpDelete]
-        [Authorize("Admin")]
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> DeletePermissions(int id)
         {
             await _permissionService.DeletePermissionAsync(id);
             return Ok();
         }
 
-        [HttpGet("{id}/roles")]
-        [Authorize("Admin")]
-        public async Task<IActionResult> GetRolesByPermission(int permissionId)
+        [HttpGet("{permissionId}/roles")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetRolesByPermission([FromRoute] int permissionId)
         {
             var result = await _permissionService.GetRolesByPermissionAsync(permissionId);
             return Ok(result);
         }
 
-        [HttpGet("{id}/users")]
-        [Authorize("Admin")]
-        public async Task<IActionResult> GetUsersByPermission(int permissionId)
+        [HttpGet("{permissionId}/users")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetUsersByPermission([FromRoute] int permissionId)
         {
             var result = await _permissionService.GetUsersByPermissionAsync(permissionId);
             return Ok(result);

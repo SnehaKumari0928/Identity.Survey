@@ -40,9 +40,9 @@ namespace Identity.Services.Implementations
 
             var existing =  await _permissionRepo.GetByNameAsync(dto.Name);
 
-            if(existing == null)
+            if(existing != null)
             {
-                throw new NotFoundException("Permission not found");
+                throw new NotFoundException("Permission already exists");
             }
 
             var permission = _mapper.Map<Permission>(dto);

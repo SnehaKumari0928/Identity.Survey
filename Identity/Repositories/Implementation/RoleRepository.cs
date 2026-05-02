@@ -24,22 +24,25 @@ namespace Identity.Repositories.Implementation
                 .ToListAsync();
         }
 
-      
+
         public async Task AssignPermissionsAsync(int roleId, List<int> permissionIds)
         {
-            var existingMapping = await _context.RolePermissions
-                 .Where(rp => rp.RoleId == roleId)
-                 .ToListAsync();
+            var existingPermissionIds = await _context.RolePermissions
+                .Where(rp => rp.RoleId == roleId)
+                .Select(rp => rp.PermissionId)
+                .ToListAsync();
 
-            _context.RolePermissions.AddRange(existingMapping);
+            var newPermissionIds = permissionIds
+                .Where(pid => !existingPermissionIds.Contains(pid))
+                .ToList();
 
-            var newMappings = permissionIds.Select(pid => new
-            RolePermission
+            var newMappings = newPermissionIds.Select(pid => new RolePermission
             {
                 RoleId = roleId,
                 PermissionId = pid
-            }
-            );
+            }).ToList();
+
+            await _context.RolePermissions.AddRangeAsync(newMappings);
 
             await _context.SaveChangesAsync();
         }

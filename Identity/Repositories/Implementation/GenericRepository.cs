@@ -45,6 +45,7 @@ namespace Identity.Repositories.Implementation
             var entity = _context.Set<T>().Find(id);
 
             _context.Set<T>().Remove(entity);
+            await _context.SaveChangesAsync();
         }
     }
 }

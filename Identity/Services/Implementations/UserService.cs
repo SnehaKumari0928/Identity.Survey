@@ -40,7 +40,7 @@ namespace Identity.Services.Implementations
         {
             var existingUser = await _userRepo.GetByEmailAsync(dto.Email);
 
-            if(existingUser == null)
+            if(existingUser != null)
             {
                 throw new BadRequestException("Email already exists");
             }
