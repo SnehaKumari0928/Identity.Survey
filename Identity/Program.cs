@@ -29,10 +29,9 @@ namespace Identity
 
 
             builder.Services.AddDbContext<AppDbContext>(options =>
-                options.UseMySql(
-                    builder.Configuration.GetConnectionString("DefaultConnection"),
-                    ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))
-                ));
+               options.UseNpgsql(
+    builder.Configuration.GetConnectionString("DefaultConnection")
+));
 
 
             builder.Services.AddAutoMapper(typeof(AuthMappingProfile).Assembly);
@@ -68,7 +67,8 @@ namespace Identity
                         RoleClaimType = System.Security.Claims.ClaimTypes.Role,
 
                         IssuerSigningKey = new SymmetricSecurityKey(
-                            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+                            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+                        ClockSkew = TimeSpan.Zero 
                     };
                 });
 
