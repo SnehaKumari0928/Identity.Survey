@@ -73,5 +73,14 @@ namespace Identity.Controllers
             return NoContent();
         }
 
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost("assign-role")]
+        public async Task<IActionResult> AssignRole(AssignRoleToUserDto dto)
+        {
+            await _userService.AssignRoleToUserAsync(dto);
+            return Ok("Role assigned successfully");
+        }
+
     }
 }

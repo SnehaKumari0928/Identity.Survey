@@ -12,6 +12,6 @@ namespace Identity.Repositories.Interfaces
         Task<List<string>> GetUserPermissionsAsync(int userId);
 
         Task<List<User>> GetUsersWithRolesAndPermissions();
-
+        Task AssignRoleAsync(int userId, int roleId);
     }
 }

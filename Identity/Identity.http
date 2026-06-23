@@ -13,3 +13,20 @@ Content-Type: application/json
 }
 
 ###
+
+GET {{Identity_HostAddress}}/api/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjIiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJzYW1AZXhhbXBsZS5jb20iLCJleHAiOjE3NzY2NjcyMjMsImlzcyI6IklkZW50aXR5U3lzdGVtIiwiYXVkIjoiU3VydmV5VXNlcnMifQ.kOU9bGwTLFXikVPugvNyQKSH2-mfNgmreQBnjHrQwCo
+
+###
+
+POST {{Identity_HostAddress}}/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "sam@example.com",
+  "password": "sneha@12345",
+  "name": "sam",
+  "phone": "8967542367"
+}
+
+###

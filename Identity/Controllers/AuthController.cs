@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Identity.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class AuthController : ControllerBase
     {
@@ -33,7 +33,7 @@ namespace Identity.Controllers
             return Ok(response);
         }
 
-        [HttpDelete("refresh-token")]
+        [HttpDelete("token/refresh")]
         public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequestDto dto)
         {
             var response = await _authService.RefreshTokenAsync(dto.RefreshToken);

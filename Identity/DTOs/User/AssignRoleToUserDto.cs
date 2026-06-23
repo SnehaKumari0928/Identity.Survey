@@ -1,8 +1,9 @@
 ﻿namespace Identity.DTOs.User
 {
-    public class AssignRoleDto
+    public class AssignRoleToUserDto
     {
-        public int UserId {  get; set; }
+
+        public int UserId { get; set; }
         public int RoleId { get; set; }
     }
 }

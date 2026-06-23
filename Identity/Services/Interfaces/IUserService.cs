@@ -21,5 +21,7 @@ namespace Identity.Services.Interfaces
 
         Task<UserResponseDto> UpdateUserAsync(int id, UpdateUserDto dto);
         Task DeleteUserAsync(int userId);
+
+        Task AssignRoleToUserAsync(AssignRoleToUserDto dto);
     }
 }

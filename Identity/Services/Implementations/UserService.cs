@@ -11,11 +11,13 @@ namespace Identity.Services.Implementations
     {
         private readonly IUserRepository _userRepo;
         private readonly IMapper _mapper;
+        private readonly IRoleRepository _roleRepo;
         
-        public UserService(IUserRepository userRepo, IMapper mapper)
+        public UserService(IUserRepository userRepo, IMapper mapper, IRoleRepository roleRepo)
         {
             _userRepo = userRepo;
             _mapper = mapper;
+            _roleRepo = roleRepo;
         }
 
         public async Task<UserResponseDto> GetByIdAsync(int userId)
@@ -40,7 +42,7 @@ namespace Identity.Services.Implementations
         {
             var existingUser = await _userRepo.GetByEmailAsync(dto.Email);
 
-            if(existingUser == null)
+            if(existingUser != null)
             {
                 throw new BadRequestException("Email already exists");
             }
@@ -109,6 +111,19 @@ namespace Identity.Services.Implementations
             }
             return await _userRepo.GetUserRolesAsync(userId);
 
+        }
+
+        public async Task AssignRoleToUserAsync(AssignRoleToUserDto dto)
+        {
+            var user = await _userRepo.GetByIdAsync(dto.UserId);
+            if (user == null)
+                throw new NotFoundException("User not found");
+
+            var role = await _roleRepo.GetByIdAsync(dto.RoleId);
+            if (role == null)
+                throw new NotFoundException("Role not found");
+
+            await _userRepo.AssignRoleAsync(dto.UserId, dto.RoleId);
         }
 
         public async Task<List<string>> GetUserPermissionsAsync(int userId)

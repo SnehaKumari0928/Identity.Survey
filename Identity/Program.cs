@@ -11,6 +11,7 @@ using Identity.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi;
 using System.Text;
 
 namespace Identity
@@ -72,8 +73,8 @@ namespace Identity
                     };
                 });
 
-
             var app = builder.Build();
+           
 
             if (app.Environment.IsDevelopment())
             {
@@ -88,9 +89,9 @@ namespace Identity
             app.UseMiddleware<ExceptionMiddleware>();
 
             app.UseHttpsRedirection();
+            app.UseAuthentication();
 
             app.UseAuthorization();
-            app.UseAuthentication();
 
             app.MapControllers();
 

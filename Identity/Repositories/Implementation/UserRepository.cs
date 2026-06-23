@@ -61,5 +61,24 @@ namespace Identity.Repositories.Implementation
                 .Include(u => u.Profile)
                 .ToListAsync();
         }
+
+
+        public async Task AssignRoleAsync(int userId, int roleId)
+        {
+            var userRoleExists = await _context.UserRoles
+                .AnyAsync(x => x.UserId == userId && x.RoleId == roleId);
+
+            if (userRoleExists)
+                return;
+
+            var userRole = new UserRole
+            {
+                UserId = userId,
+                RoleId = roleId
+            };
+
+            await _context.UserRoles.AddAsync(userRole);
+            await _context.SaveChangesAsync();
+        }
     }
 }
