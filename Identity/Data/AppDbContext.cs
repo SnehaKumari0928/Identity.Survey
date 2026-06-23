@@ -17,6 +17,8 @@ namespace Identity.Data
         public DbSet<RolePermission> RolePermissions { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
 
+        public DbSet<PasswordResetToken> PasswordResetTokens { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

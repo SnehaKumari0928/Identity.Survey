@@ -14,6 +14,7 @@
         public List<UserPermission> UserPermissions { get; set; }
 
         public List<RefreshToken> RefreshTokens { get; set; }
+        public List<PasswordResetToken> PasswordResetTokens { get; set; } = new List<PasswordResetToken>();
 
     }
 }

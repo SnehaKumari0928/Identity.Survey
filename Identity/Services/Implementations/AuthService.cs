@@ -3,6 +3,7 @@ using Identity.DTOs.Auth;
 using Identity.DTOs.User;
 using Identity.Entities;
 using Identity.Exceptions;
+using Identity.Helpers;
 using Identity.Repositories.Interfaces;
 using Identity.Security.Interfaces;
 using Identity.Services.Interfaces;
@@ -15,14 +16,17 @@ namespace Identity.Services.Implementations
         private readonly IAuthRepository _authRepo;
         private readonly IUserRepository _userRepo;
         private readonly IMapper _mapper;
-        private readonly ITokenService _tokenService;   
+        private readonly ITokenService _tokenService;
+        private readonly IPasswordResetTokenRepository _tokenRepo;
+       
 
-        public AuthService(IAuthRepository authRepo, IMapper mapper, ITokenService tokenService,IUserRepository userRepo)
+        public AuthService(IAuthRepository authRepo, IMapper mapper, ITokenService tokenService,IUserRepository userRepo, IPasswordResetTokenRepository tokenRepo)
         {
             _authRepo = authRepo;
             _mapper = mapper;
             _tokenService = tokenService;
             _userRepo = userRepo;
+            _tokenRepo = tokenRepo;
         }
 
         public async Task<AuthResponseDto> RegisterAsync(RegisterDto dto)
@@ -109,6 +113,32 @@ namespace Identity.Services.Implementations
             };
         }
 
-       
+
+        public async Task<string> ForgotPasswordAsync(ForgotPasswordDto dto)
+        {
+            var user = await _userRepo.GetByEmailAsync(dto.Email);
+            if(user == null)
+            {
+                throw new NotFoundException("User not found");
+            }
+
+            var token = TokenGenerator.GenerateToken();
+
+            var resetToken = new PasswordResetToken
+            {
+                Token = token,
+                UserId = user.UserId,
+                IsUsed = false,
+                ExpiresAt = DateTime.UtcNow.AddHours(1)
+            };
+
+            await _tokenRepo.AddAsync(resetToken);
+
+            
+        }
+        public async Task<string> ResetPasswordAsync(ResetPasswordDto dto)
+        {
+
+        }
     }
 }
