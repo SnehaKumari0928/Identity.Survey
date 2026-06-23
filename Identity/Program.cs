@@ -18,7 +18,7 @@ namespace Identity
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -30,10 +30,9 @@ namespace Identity
 
 
             builder.Services.AddDbContext<AppDbContext>(options =>
-                options.UseMySql(
-                    builder.Configuration.GetConnectionString("DefaultConnection"),
-                    ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))
-                ));
+               options.UseNpgsql(
+    builder.Configuration.GetConnectionString("DefaultConnection")
+));
 
 
             builder.Services.AddAutoMapper(typeof(AuthMappingProfile).Assembly);
@@ -69,12 +68,19 @@ namespace Identity
                         RoleClaimType = System.Security.Claims.ClaimTypes.Role,
 
                         IssuerSigningKey = new SymmetricSecurityKey(
-                            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+                            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+                        ClockSkew = TimeSpan.Zero 
                     };
                 });
 
             var app = builder.Build();
            
+
+            using(var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                await DbSeeder.SeedAdminAsync(services);
+            }
 
             if (app.Environment.IsDevelopment())
             {

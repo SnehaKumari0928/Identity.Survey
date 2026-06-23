@@ -57,17 +57,20 @@ namespace Identity.Mappings
                   );
 
             CreateMap<User, UserResponseDto>()
-                .ForMember(dest =>
-                dest.Roles,
-                opt => opt.MapFrom(src =>
-                src.UserRoles.Select(ur => ur.Role.Name)))
-                .ForMember(dest =>
-                dest.Permissions,
-                opt => opt.MapFrom(src =>
-                src.UserPermissions.Select(up => up.Permission.Name)))
-                .ForSourceMember(src =>
-                 src.HashedPassword, opt =>
-                 opt.DoNotValidate());
+     .ForMember(dest => dest.Roles,
+         opt => opt.MapFrom(src =>
+             src.UserRoles.Select(ur => ur.Role.Name)))
+
+     .ForMember(dest => dest.Permissions,
+         opt => opt.MapFrom(src =>
+             src.UserRoles
+                 .SelectMany(ur => ur.Role.RolePermissions)
+                 .Select(rp => rp.Permission.Name)
+                 .Distinct()
+         ))
+
+     .ForSourceMember(src => src.HashedPassword,
+         opt => opt.DoNotValidate());
         }
     }
 }

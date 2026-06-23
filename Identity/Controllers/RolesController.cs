@@ -48,7 +48,7 @@ namespace Identity.Controllers
         }
 
         [HttpPost("createrole")]
-        [Authorize("admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateRole([FromBody] CreateRoleDto dto)
         {
             var created = await _roleService.CreateRoleAsync(dto);
@@ -56,7 +56,7 @@ namespace Identity.Controllers
         }
 
         [HttpPut("{id}/updaterole")]
-        [Authorize("admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateRole(int id,[FromBody] UpdateRoleDto dto)
         {
             var created = await _roleService.UpdateRoleAsync(id,dto);
@@ -64,7 +64,7 @@ namespace Identity.Controllers
         }
 
         [HttpDelete("{id}/deleterole")]
-        [Authorize("admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteRole(int id)
         {
             await _roleService.DeleteRoleAsync(id);
@@ -72,7 +72,7 @@ namespace Identity.Controllers
         }
 
         [HttpPost("{id}/permissions")]
-        [Authorize("admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AssignPermissions([FromBody] AssignPermissionToRoleDto dto)
         {
             await _roleService.AssignPermissionsAsync(dto);

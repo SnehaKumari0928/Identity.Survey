@@ -11,7 +11,7 @@ namespace Identity.Repositories.Implementation
 
         public async Task<Permission> GetByNameAsync(string name)
         {
-            return await _context.Permissions.FindAsync(name);
+            return await _context.Permissions.FirstOrDefaultAsync(p => p.Name == name);
         }
         public async Task<List<string>> GetRolesByPermissionIdAsync(int permissionId)
         {
